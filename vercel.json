@@ -10,8 +10,8 @@
       "use": "@vercel/static-build",
       "config": {
         "installCommand": "yarn install --cwd frontend",
-        "buildCommand": "yarn --cwd frontend build",
-        "outputDirectory": "frontend/build"
+        "buildCommand": "yarn build --cwd frontend",
+        "distDir": "frontend/build"
       }
     }
   ],
@@ -22,19 +22,19 @@
     },
     {
       "source": "/static/(.*)",
-      "destination": "/frontend/build/static/$1"
+      "destination": "/static/$1"
     },
     {
       "source": "/favicon.ico",
-      "destination": "/frontend/build/favicon.ico"
+      "destination": "/favicon.ico"
     },
     {
       "source": "/manifest.json",
-      "destination": "/frontend/build/manifest.json"
+      "destination": "/manifest.json"
     },
     {
       "source": "/(.*)",
-      "destination": "/frontend/build/index.html"
+      "destination": "/index.html"
     }
   ]
 }
