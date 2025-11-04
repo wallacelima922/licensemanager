@@ -1,0 +1,15 @@
+[
+  {
+    "_id": "690437975fac74e3220f9072",
+    "id": "bdd056e6-3e79-457e-9302-862985333bb8",
+    "license_key": "3b6f6b20-996e-410a-83cc-ce10972f0603",
+    "client_name": "Empresa Teste Ltda",
+    "domain": "example.com",
+    "product_id": "7fce74b8-8086-453f-a64b-a72ead7fd0b1",
+    "user_id": "2e1620f1-2e74-4d38-ae45-09a7057ca300",
+    "expiration_date": "2026-10-31T04:14:15.584679+00:00",
+    "status": "active",
+    "created_at": "2025-10-31T04:14:15.584694+00:00",
+    "updated_at": "2025-10-31T04:14:15.584696+00:00"
+  }
+]
