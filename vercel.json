@@ -1,40 +1,40 @@
 {
   "version": 2,
   "builds": [
-    { 
-      "src": "backend/server.py", 
-      "use": "@vercel/python" 
+    {
+      "src": "backend/server.py",
+      "use": "@vercel/python"
     },
     {
       "src": "frontend/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "installCommand": "yarn install",
-        "buildCommand": "yarn build",
-        "outputDirectory": "build"
+        "installCommand": "yarn install --cwd frontend",
+        "buildCommand": "yarn --cwd frontend build",
+        "outputDirectory": "frontend/build"
       }
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "/backend/server.py"
+      "source": "/api/(.*)",
+      "destination": "/backend/server.py"
     },
     {
-      "src": "/static/(.*)",
-      "dest": "/frontend/build/static/$1"
+      "source": "/static/(.*)",
+      "destination": "/frontend/build/static/$1"
     },
     {
-      "src": "/favicon.ico",
-      "dest": "/frontend/build/favicon.ico"
+      "source": "/favicon.ico",
+      "destination": "/frontend/build/favicon.ico"
     },
     {
-      "src": "/manifest.json",
-      "dest": "/frontend/build/manifest.json"
+      "source": "/manifest.json",
+      "destination": "/frontend/build/manifest.json"
     },
     {
-      "src": "/(.*)",
-      "dest": "/frontend/build/index.html"
+      "source": "/(.*)",
+      "destination": "/frontend/build/index.html"
     }
   ]
 }
