@@ -18,6 +18,9 @@ load_dotenv(ROOT_DIR / '.env')
 
 # MongoDB connection
 mongo_url = os.environ.get('MONGO_URL')
+if not mongo_url:
+    # Se MONGO_URL não estiver definida (o que não deve acontecer no Vercel, mas é seguro checar)
+    raise RuntimeError("A variável de ambiente MONGO_URL não está definida.")
 client = AsyncIOMotorClient(mongo_url)
 db_name = os.environ.get('DB_NAME', 'license_system')
 
