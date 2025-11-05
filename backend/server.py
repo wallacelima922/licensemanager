@@ -29,7 +29,8 @@ ALGORITHM = "HS256"
 
 # Create the main app
 app = FastAPI()
-api_router = APIRouter(prefix="/api")
+#api_router = APIRouter(prefix="/api")
+api_router = APIRouter()
 
 # ============= MODELS =============
 
@@ -520,7 +521,8 @@ async def mercadopago_webhook(request: dict):
         return {"status": "error"}
 
 # Include router
-app.include_router(api_router)
+# app.include_router(api_router)
+app.include_router(api_router, prefix="/api")
 
 app.add_middleware(
     CORSMiddleware,
