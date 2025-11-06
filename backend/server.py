@@ -27,7 +27,7 @@ db_name = os.environ.get('DB_NAME', 'license_system')
 # Security
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer()
-SECRET_KEY = os.environ.get('SECRET_KEY', 'your-secret-key-change-in-production')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'your-secret-key-change-in-production-xyz123')
 ALGORITHM = "HS256"
 
 # Create the main app
