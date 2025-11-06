@@ -17,37 +17,12 @@ ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
 # MongoDB connection
-# server.py (Após os 'imports' e 'load_dotenv')
-# Importações...
+mongo_url = os.environ.get('MONGO_URL')
+db_name = os.environ.get('DB_NAME')
 
-ROOT_DIR = Path(__file__).parent
-load_dotenv(ROOT_DIR / '.env')
-
-# ====================================================================
-# NOVO BLOCO DE TESTE: GARANTINDO SAÍDA DE LOG E CRASH
-# ====================================================================
-import sys
-
-try:
-    # 1. Imprime uma linha única e fácil de buscar (stdout/stderr)
-    print("--- VERCEL LOG TEST: INICIANDO VERIFICAÇÃO DE LOGS ---", file=sys.stdout)
-    print("--- VERCEL LOG TEST: PRÓXIMO PASSO É FALHAR ---", file=sys.stderr)
-
-    # 2. Força uma exceção simples e imediata.
-    raise RuntimeError("FATAL ERROR TEST: O Servidor VAI QUEBRAR aqui de propósito.")
-
-except RuntimeError as e:
-    # 3. Imprime o erro capturado
-    print(f"--- VERCEL LOG TEST: ERRO CAPTURADO: {e} ---", file=sys.stdout)
-    
-    # 4. Re-lança o erro para garantir que o processo morra e o Vercel registre a falha.
-    # Esta linha é crucial para o Vercel encerrar e exibir o log de falha.
-    raise
-
-# ====================================================================
-# O restante do seu código original (MongoDB connection, Security, app=FastAPI())
-# NÃO SERÁ ALCANÇADO NEM EXECUTADO.
-# ====================================================================
+if not mongo_url:
+    print("FATAL ERROR: MONGO_URL está faltando. Verifique as Variáveis de Ambiente no Vercel.")
+    raise ValueError("MONGO_URL não configurada.")
 
 # Security
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
