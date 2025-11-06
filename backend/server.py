@@ -17,25 +17,36 @@ ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
 # MongoDB connection
-mongo_url = os.environ.get('MONGO_URL', 'mongodb+srv://wallaceplanoblima_db_user:NUGl7CwlAGXwrJRD@cluster0.vnlb7ed.mongodb.net/?appName=Cluster0')
-if not mongo_url:
-    # Se MONGO_URL não estiver definida (o que não deve acontecer no Vercel, mas é seguro checar)
-    raise RuntimeError("A variável de ambiente MONGO_URL não está definida.")
-client = AsyncIOMotorClient(mongo_url)
-db_name = os.environ.get('DB_NAME', 'license_system')
+# server.py (Após os 'imports' e 'load_dotenv')
+# Importações...
+
+ROOT_DIR = Path(__file__).parent
+load_dotenv(ROOT_DIR / '.env')
+
+# ====================================================================
+# NOVO BLOCO DE TESTE: GARANTINDO SAÍDA DE LOG E CRASH
+# ====================================================================
+import sys
+
 try:
-    client = AsyncIOMotorClient(mongo_url)
-    db = client[db_name]
-    # Tenta obter uma referência a uma coleção para forçar uma checagem inicial da conexão
-    # db.command('ping') não funciona bem com Motor assíncrono em startup
-    db.users # Apenas referencia a coleção para checagem implícita
+    # 1. Imprime uma linha única e fácil de buscar (stdout/stderr)
+    print("--- VERCEL LOG TEST: INICIANDO VERIFICAÇÃO DE LOGS ---", file=sys.stdout)
+    print("--- VERCEL LOG TEST: PRÓXIMO PASSO É FALHAR ---", file=sys.stderr)
 
-except Exception as e:
-    # Loga o erro se a conexão falhar
-    logger.error(f"FATAL: Database connection failed during startup: {e}")
-    # Re-levanta o erro para que o Vercel registre uma falha na inicialização
-    raise ConnectionError("Failed to connect to MongoDB. Check MONGO_URL and DB_NAME.")
+    # 2. Força uma exceção simples e imediata.
+    raise RuntimeError("FATAL ERROR TEST: O Servidor VAI QUEBRAR aqui de propósito.")
 
+except RuntimeError as e:
+    # 3. Imprime o erro capturado
+    print(f"--- VERCEL LOG TEST: ERRO CAPTURADO: {e} ---", file=sys.stdout)
+    
+    # 4. Re-lança o erro para garantir que o processo morra e o Vercel registre a falha.
+    # Esta linha é crucial para o Vercel encerrar e exibir o log de falha.
+    raise
+
+# ====================================================================
+# O restante do seu código original (MongoDB connection, Security, app=FastAPI())
+# NÃO SERÁ ALCANÇADO NEM EXECUTADO.
 # ====================================================================
 
 # Security
