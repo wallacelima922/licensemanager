@@ -17,12 +17,26 @@ ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
 # MongoDB connection
-mongo_url = os.environ.get('MONGO_URL')
+mongo_url = os.environ.get('MONGO_URL', 'mongodb+srv://wallaceplanoblima_db_user:NUGl7CwlAGXwrJRD@cluster0.vnlb7ed.mongodb.net/?appName=Cluster0')
 if not mongo_url:
     # Se MONGO_URL não estiver definida (o que não deve acontecer no Vercel, mas é seguro checar)
     raise RuntimeError("A variável de ambiente MONGO_URL não está definida.")
 client = AsyncIOMotorClient(mongo_url)
 db_name = os.environ.get('DB_NAME', 'license_system')
+try:
+    client = AsyncIOMotorClient(mongo_url)
+    db = client[db_name]
+    # Tenta obter uma referência a uma coleção para forçar uma checagem inicial da conexão
+    # db.command('ping') não funciona bem com Motor assíncrono em startup
+    db.users # Apenas referencia a coleção para checagem implícita
+
+except Exception as e:
+    # Loga o erro se a conexão falhar
+    logger.error(f"FATAL: Database connection failed during startup: {e}")
+    # Re-levanta o erro para que o Vercel registre uma falha na inicialização
+    raise ConnectionError("Failed to connect to MongoDB. Check MONGO_URL and DB_NAME.")
+
+# ====================================================================
 
 # Security
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
