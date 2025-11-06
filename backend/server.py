@@ -17,13 +17,14 @@ ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
 # MongoDB connection
-mongo_url = os.environ.get('MONGO_URL')
-db_name = os.environ.get('DB_NAME')
+mongo_url = os.environ['MONGO_URL']
+
+db = client[os.environ['DB_NAME']]
 
 if not mongo_url:
     print("FATAL ERROR: MONGO_URL está faltando. Verifique as Variáveis de Ambiente no Vercel.")
     raise ValueError("MONGO_URL não configurada.")
-
+client = AsyncIOMotorClient(mongo_url)
 # Security
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer()
